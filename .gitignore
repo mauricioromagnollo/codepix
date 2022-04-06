@@ -2,7 +2,10 @@
 NOTES.md
 
 # Docker files
-.pgdata/
+.pgdata
 
 # Env
 .env
+
+# IDE's
+.idea
