@@ -3,3 +3,6 @@ NOTES.md
 
 # Docker files
 .pgdata/
+
+# Env
+.env
