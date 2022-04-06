@@ -2,10 +2,9 @@ package model
 
 import (
 	"errors"
-	"time"
-
 	"github.com/asaskevich/govalidator"
 	uuid "github.com/satori/go.uuid"
+	"time"
 )
 
 const (
@@ -43,19 +42,19 @@ func init() {
 
 func (t *Transaction) isValid() error {
 	_, err := govalidator.ValidateStruct(t)
-	
+
 	if t.Amount <= 0 {
 		return errors.New("the amount must be greater than 0")
 	}
-	
+
 	if t.Status != TransactionPending && t.Status != TransactionCompleted && t.Status != TransactionError {
 		return errors.New("invalid status for the transaction")
 	}
-	
+
 	if t.PixKeyTo.AccountID == t.AccountFromID {
 		return errors.New("the source and destination account cannot be the same")
 	}
-	
+
 	if err != nil {
 		return err
 	}
@@ -66,7 +65,6 @@ func (t *Transaction) Complete() error {
 	t.Status = TransactionCompleted
 	t.UpdatedAt = time.Now()
 	err := t.isValid()
-	
 	return err
 }
 
@@ -75,12 +73,10 @@ func (t *Transaction) Cancel(description string) error {
 	t.CancelDescription = description
 	t.UpdatedAt = time.Now()
 	err := t.isValid()
-	
 	return err
 }
 
 func NewTransaction(accountFrom *Account, amount float64, pixKeyTo *PixKey, description string, id string) (*Transaction, error) {
-
 	transaction := Transaction{
 		AccountFrom:   accountFrom,
 		AccountFromID: accountFrom.ID,
@@ -90,19 +86,15 @@ func NewTransaction(accountFrom *Account, amount float64, pixKeyTo *PixKey, desc
 		Status:        TransactionPending,
 		Description:   description,
 	}
-	
 	if id == "" {
 		transaction.ID = uuid.NewV4().String()
 	} else {
 		transaction.ID = id
 	}
-
 	transaction.CreatedAt = time.Now()
 	err := transaction.isValid()
-	
 	if err != nil {
 		return nil, err
 	}
-		
 	return &transaction, nil
 }

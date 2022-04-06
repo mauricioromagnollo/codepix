@@ -2,7 +2,7 @@ package model
 
 import (
 	"time"
-	
+
 	"github.com/asaskevich/govalidator"
 	uuid "github.com/satori/go.uuid"
 )
@@ -22,11 +22,9 @@ type Account struct {
 
 func (account *Account) isValid() error {
 	_, err := govalidator.ValidateStruct(account)
-
 	if err != nil {
 		return err
 	}
-
 	return nil
 }
 
@@ -37,16 +35,13 @@ func NewAccount(bank *Bank, number string, ownerName string) (*Account, error) {
 		Number:    number,
 		OwnerName: ownerName,
 	}
-	
+
 	account.ID = uuid.NewV4().String()
 	account.CreatedAt = time.Now()
-	
-	err := account.isValid()
 
+	err := account.isValid()
 	if err != nil {
 		return nil, err
 	}
-	
 	return &account, nil
 }
-
